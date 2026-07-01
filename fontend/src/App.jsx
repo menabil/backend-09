@@ -41,49 +41,63 @@ function App() {
 
   return (
     <>
-      <section className="text-center mt-10 max-w-xl mx-auto p-10 rounded-2xl bg-[#1A1A1A] ">
+      <section className="text-center mt-10 max-w-xl mx-auto p-8 rounded-2xl bg-[#1A1A1A] shadow-xl border border-zinc-800">
         {/* Title */}
-        <h1 className="text-4xl font-bold mb-6 text-white">Todo</h1>
+        <h1 className="text-4xl font-extrabold mb-6 text-white tracking-tight">Todo</h1>
 
-        {/* Input and Button Container */}
-        <div className="flex gap-2 justify-center">
-          {info.message && (
-            info.success ?
-              <p>
-                {/* {info.message} */}
-              </p>
-              :
-              <p className="text-red-700 bg-red-50 border border-red-200 p-3.5 rounded-xl mb-6 text-center font-medium shadow-sm">
-                {info.message}
-              </p>
-          )}
-          <input value={task}
-            type="text" onChange={handelTask}
-            placeholder="Write here..."
-            className="border-2 border-blue-500 rounded-lg px-3 py-1.5 w-65 focus:outline-none focus:border-blue-500 placeholder:text-[#565656]"
+        {/* Error Message - Placed above the input row to prevent layout breaking */}
+        {info.message && !info.success && (
+          <p className="text-red-400 bg-red-950/40 border border-red-900/50 p-3 rounded-xl mb-4 text-sm font-medium">
+            {info.message}
+          </p>
+        )}
+
+        {/* Input Control Group */}
+        <div className="flex gap-2 items-stretch justify-center">
+          <input
+            value={task}
+            type="text"
+            onChange={handelTask}
+            placeholder="Write a task..."
+            className="bg-zinc-900 border border-zinc-700 text-white rounded-xl px-4 py-3 w-full max-w-[240px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-zinc-500 transition-all text-sm"
           />
-          <select value={priority} onChange={handelPriority} className="bg-[#565656]/30 rounded-2xl p-3 text-white">
-            <option value="" disabled >Select</option>
+
+          <select
+            value={priority}
+            onChange={handelPriority}
+            className="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm cursor-pointer"
+          >
+            <option value="" disabled>Priority</option>
             <option value="Low">Low</option>
             <option value="Mid">Mid</option>
             <option value="High">High</option>
           </select>
+
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-1.5 rounded-lg transition-colors"
-            onClick={handelClick} >
+            className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-3 rounded-xl transition-colors text-sm shadow-md active:scale-98"
+            onClick={handelClick}
+          >
             Add Task
           </button>
         </div>
-        <ul className="bg-[#565656]/30 p-10 my-5 rounded-2xl text-white">
-          {data.map((item) => (
-            <div key={item.id}>
-              <li className="flex justify-around">
-                <p>{item.task}</p>
-                <p>{item.priority}</p></li>
-            </div>
-          ))}
-        </ul>
-      </section >
+
+        {/* Task List Container */}
+        {data.length > 0 && (
+          <ul className="bg-zinc-900/50 border border-zinc-850 p-6 mt-6 rounded-2xl text-white divide-y divide-zinc-800 text-left">
+            {data.map((item) => (
+              <li key={item.id} className="flex justify-between items-center py-3 first:pt-0 last:pb-0">
+                <span className="font-medium text-zinc-200">{item.task}</span>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${item.priority === 'High' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                  item.priority === 'Mid' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                    'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  }`}>
+                  {item.priority}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </>
   )
 }
